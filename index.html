@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Store</title>
+<style>
+    :root { --primary: #28a745; }
+    body{margin:0; font-family:'Segoe UI', sans-serif; background:#f4f7f6; color:#333;}
+    #loader { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+    .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .container{max-width:480px; margin:auto; background:#fff; min-height: 100vh; display: none; box-shadow: 0 0 20px rgba(0,0,0,0.05);}
+    .slider-box{width:100%; height:350px; position:relative; overflow:hidden;}
+    #mainSlider{width:100%; height:100%; object-fit:cover; transition: opacity 0.6s ease-in-out;}
+    .content { padding: 20px; }
+    .price-text { text-align: center; font-size: 35px; color: #e41e31; font-weight: bold; margin-bottom: 15px; }
+    .info-card { background: #fffbe6; border: 1px solid #ffe58f; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+    .info-card li { margin-bottom: 8px; font-size: 15px; list-style: none; display: flex; align-items: center; }
+    .info-card li::before { content: "✓"; color: var(--primary); font-weight: bold; margin-right: 10px; }
+    .blink-offer { color: red; font-weight: bold; text-align: center; display: block; margin-top: 10px; animation: blink 1.5s infinite; }
+    @keyframes blink { 50% { opacity: 0.2; } }
+    .item-row { display: flex; align-items: center; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 10px 15px; justify-content: space-between; margin-bottom: 10px;}
+    .item-left { display: flex; align-items: center; gap: 15px; }
+    .item-left img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+    .qty-group { display: flex; align-items: center; gap: 12px; background: #f1f3f5; border-radius: 25px; padding: 5px 12px; }
+    .qty-group button { width: 30px; height: 30px; border-radius: 50%; border: none; background: #333; color: #fff; cursor: pointer; font-weight: bold; }
+    .order-btn { width: 100%; background: var(--primary); color: #fff; font-size: 20px; padding: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; }
+    .modal-content { background: #fff; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; position: relative; max-height: 90vh; overflow-y: auto; }
+    input, select, textarea { width: 100%; padding: 14px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+    .order-summary { background: #fdf2f2; border-left: 5px solid red; padding: 12px; margin: 15px 0; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="spinner"></div><p style="margin-top:10px;">Loading...</p></div>
+
+<div class="container" id="mainContainer">
+    <div class="slider-box"><img id="mainSlider" src=""></div>
+    <div class="content">
+        <div class="price-text" id="displayPrice">৳0</div>
+        <div class="info-card"><ul id="descList"></ul><span class="blink-offer" id="topOffer"></span></div>
+        <div class="item-row"><div class="item-left"><img id="blackThumb" src=""><b>Black</b></div><div class="qty-group"><button onclick="updateQty('black',-1)">-</button><b id="blackQty">0</b><button onclick="updateQty('black',1)">+</button></div></div>
+        <div class="item-row"><div class="item-left"><img id="whiteThumb" src=""><b>White</b></div><div class="qty-group"><button onclick="updateQty('white',-1)">-</button><b id="whiteQty">0</b><button onclick="updateQty('white',1)">+</button></div></div>
+        <button class="order-btn" onclick="openForm()">Confirm Order Now</button>
+    </div>
+</div>
+
+<div class="modal" id="orderModal">
+    <div class="modal-content">
+        <span onclick="closeModal()" style="position:absolute;top:15px;right:20px;font-size:30px;cursor:pointer;">&times;</span>
+        <h3 style="text-align:center;">Shipping Info</h3>
+        <input id="name" type="text" placeholder="Your Name">
+        <input id="phone" type="number" placeholder="Mobile Number">
+        <select id="district"><option value="">Select District</option></select>
+        <input id="upazila" type="text" placeholder="Upazila / City">
+        <input id="landmark" type="text" placeholder="Area / Landmark">
+        <div class="order-summary" id="finalSummary"></div>
+        <button class="order-btn" id="confirmBtn" onclick="sendOrder()">Place Order</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+    emailjs.init("FreFR_s1DSV28TFoM");
+    const firebaseConfig = {
+        apiKey: "AIzaSyDtRJ5AMuaUpfR3-_j0pZt-MjXeownEzIY",
+        authDomain: "bandana-62578.firebaseapp.com",
+        projectId: "bandana-62578",
+        databaseURL: "https://bandana-62578-default-rtdb.firebaseio.com",
+        appId: "1:523004413172:web:95892d8385fce689d90aa1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const districts = ["Dhaka", "Chattogram", "Sylhet", "Rajshahi", "Khulna", "Barisal", "Rangpur", "Mymensingh", "Bagerhat", "Bandarban", "Barguna", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", "Chapai Nawabganj", "Chuadanga", "Comilla", "Cox's Bazar", "Dinajpur", "Faridpur", "Feni", "Gaibandha", "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore", "Jhalokathi", "Jhenaidah", "Joypurhat", "Khagrachari", "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", "Meherpur", "Moulvibazar", "Munshiganj", "Naogaon", "Narail", "Narayanganj", "Narsingdi", "Natore", "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", "Pirojpur", "Rajbari", "Rangamati", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Tangail", "Thakurgaon"];
+    const distSelect = document.getElementById('district');
+    districts.sort().forEach(d => { let opt = document.createElement('option'); opt.value = d; opt.innerText = d; distSelect.appendChild(opt); });
+
+    let sliders = [], qty = { black: 0, white: 0 }, globalOffer = "", unitPrice = 195;
+
+    db.ref('siteConfig').on('value', (snapshot) => {
+        const d = snapshot.val();
+        if (d) {
+            unitPrice = parseInt(d.price) || 195;
+            document.getElementById('displayPrice').innerText = "৳" + unitPrice;
+            sliders = d.sliders || [];
+            if(sliders.length > 0) document.getElementById('mainSlider').src = sliders[0];
+            document.getElementById('blackThumb').src = d.blackImg;
+            document.getElementById('whiteThumb').src = d.whiteImg;
+            globalOffer = d.offer || "";
+            document.getElementById('topOffer').innerText = globalOffer;
+            document.getElementById('descList').innerHTML = `<li>${d.desc1}</li><li>${d.desc2}</li><li>${d.desc3}</li>`;
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'block';
+        }
+    });
+
+    // স্লাইডার ১.৫ সেকেন্ড পর পর
+    let sIdx = 0;
+    setInterval(() => {
+        if(sliders.length > 1){
+            sIdx = (sIdx + 1) % sliders.length;
+            document.getElementById('mainSlider').src = sliders[sIdx];
+        }
+    }, 1500);
+
+    function updateQty(type, val) {
+        qty[type] = Math.max(0, qty[type] + val);
+        document.getElementById(type + 'Qty').innerText = qty[type];
+    }
+
+    function openForm() {
+        const total = qty.black + qty.white;
+        if (total === 0) { alert("Please select at least 1 item!"); return; }
+        document.getElementById("orderModal").style.display = "flex";
+        const delivery = total >= 2 ? 0 : 100;
+        const subtotal = total * unitPrice;
+        document.getElementById("finalSummary").innerHTML = `
+            <b>Order Items:</b> Black: ${qty.black} | White: ${qty.white}<br>
+            <b>Bill:</b> ৳${subtotal} | <b>Delivery:</b> ৳${delivery}<br>
+            <b>Total Amount: ৳${subtotal + delivery}</b><br>
+            <span style="color:red; font-weight:bold;">${globalOffer}</span>
+        `;
+    }
+
+    function closeModal() { document.getElementById("orderModal").style.display = "none"; }
+
+    function sendOrder() {
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        if (!name || phone.length < 11) { alert("Valid Info Required!"); return; }
+
+        const btn = document.getElementById("confirmBtn");
+        btn.innerText = "Processing..."; btn.disabled = true;
+
+        const orderID = Math.floor(10000 + Math.random() * 90000);
+        const total = qty.black + qty.white;
+        const delivery = total >= 2 ? 0 : 100;
+
+        emailjs.send('service_akk7tzo', 'template_kulaxeh', {
+            order_no: orderID,
+            name: name,
+            phone: phone,
+            district: document.getElementById("district").value,
+            upazila: document.getElementById("upazila").value,
+            location: document.getElementById("landmark").value || "N/A",
+            black: qty.black,
+            white: qty.white,
+            product_total: total * unitPrice,
+            delivery: delivery,
+            total: (total * unitPrice) + delivery
+        }).then(() => {
+            alert("Order Success! ID: " + orderID);
+            location.reload();
+        }, () => {
+            btn.disabled = false;
+        });
+    }
+</script>
+</body>
+</html>

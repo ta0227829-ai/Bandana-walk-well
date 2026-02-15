@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +31,24 @@
     .modal-content { background: #fff; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; position: relative; max-height: 90vh; overflow-y: auto; }
     input, select, textarea { width: 100%; padding: 14px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
     .order-summary { background: #fdf2f2; border-left: 5px solid red; padding: 12px; margin: 15px 0; font-size: 14px; }
+    
+    /* Contact Buttons */
+    .contact-section { margin-top: 25px; padding-top: 20px; border-top: 2px dashed #ddd; }
+    .contact-title { text-align: center; font-size: 18px; color: #333; margin-bottom: 15px; font-weight: 600; }
+    .contact-buttons { display: flex; flex-direction: column; gap: 12px; }
+    .contact-btn-premium { position: relative; display: flex; align-items: center; padding: 0; text-decoration: none; border-radius: 14px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+    .contact-btn-premium:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+    .icon-section { width: 70px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.15); border-right: 1px solid rgba(255,255,255,0.2); padding: 16px 0; }
+    .icon-circle { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.25); transition: transform 0.3s ease; }
+    .contact-btn-premium:hover .icon-circle { transform: rotate(360deg) scale(1.1); }
+    .icon-circle svg { width: 24px; height: 24px; fill: #fff; }
+    .text-section { flex: 1; padding: 16px 20px; color: #fff; font-size: 16px; font-weight: 600; }
+    .whatsapp-btn { background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); }
+    .call-btn { background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); }
+    .facebook-btn { background: linear-gradient(135deg, #1877F2 0%, #0c5dca 100%); }
+    .phone-number-display { text-align: center; margin-top: 15px; padding: 12px; background: #f8f9fa; border-radius: 10px; border: 1px solid #e9ecef; }
+    .phone-number-display .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #6c757d; margin-bottom: 5px; }
+    .phone-number-display .number { font-size: 18px; font-weight: 700; color: #333; letter-spacing: 1px; }
 </style>
 </head>
 <body>
@@ -44,20 +63,55 @@
         <div class="item-row"><div class="item-left"><img id="blackThumb" src=""><b>Black</b></div><div class="qty-group"><button onclick="updateQty('black',-1)">-</button><b id="blackQty">0</b><button onclick="updateQty('black',1)">+</button></div></div>
         <div class="item-row"><div class="item-left"><img id="whiteThumb" src=""><b>White</b></div><div class="qty-group"><button onclick="updateQty('white',-1)">-</button><b id="whiteQty">0</b><button onclick="updateQty('white',1)">+</button></div></div>
         <button class="order-btn" onclick="openForm()">Confirm Order Now</button>
+        
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <div class="contact-title">অথবা সরাসরি যোগাযোগ করুন</div>
+            <div class="contact-buttons">
+                <a href="https://wa.me/8801735770313" class="contact-btn-premium whatsapp-btn">
+                    <div class="icon-section">
+                        <div class="icon-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-section">WhatsApp চ্যাট</div>
+                </a>
+                <a href="tel:+8801735770313" class="contact-btn-premium call-btn">
+                    <div class="icon-section">
+                        <div class="icon-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-section">কল করুন</div>
+                </a>
+                <a href="https://www.facebook.com/share/1Avxvk2KkE/" class="contact-btn-premium facebook-btn">
+                    <div class="icon-section">
+                        <div class="icon-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V334.2H141.4V256h52.8V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1c-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H287V510.1C413.8 494.8 512 386.9 512 256h0z"/></svg>
+                        </div>
+                    </div>
+                    <div class="text-section">Facebook পেজ</div>
+                </a>
+            </div>
+            <div class="phone-number-display">
+                <div class="label">সরাসরি ফোন</div>
+                <div class="number">+880 1735 770313</div>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="modal" id="orderModal">
     <div class="modal-content">
         <span onclick="closeModal()" style="position:absolute;top:15px;right:20px;font-size:30px;cursor:pointer;">&times;</span>
-        <h3 style="text-align:center;">Shipping Info</h3>
-        <input id="name" type="text" placeholder="আপনার নাম ">
-        <input id="phone" type="number" placeholder="আপনার ফোন নাম্বার ">
-        <select id="district"><option value="">আপনার জেলা নির্বাচন করুন </option></select>
-        <input id="upazila" type="text" placeholder="থানা/ সিটি ">
-        <input id="landmark" type="text" placeholder="এলাকা ">
+        <h3 style="text-align:center;">শিপিং তথ্য</h3>
+        <input id="name" type="text" placeholder="নাম">
+        <input id="phone" type="number" placeholder="ফোন নাম্বার">
+        <select id="district"><option value="">জেলা নির্বাচন করুন</option></select>
+        <input id="upazila" type="text" placeholder="থানা / সিটি">
+        <input id="landmark" type="text" placeholder="এলাকার নাম (ঐচ্ছিক)">
         <div class="order-summary" id="finalSummary"></div>
-        <button class="order-btn" id="confirmBtn" onclick="sendOrder()">Place Order</button>
+        <button class="order-btn" id="confirmBtn" onclick="sendOrder()">অর্ডার সম্পন্ন করুন</button>
     </div>
 </div>
 
@@ -77,7 +131,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const districts = ["Dhaka", "Chattogram", "Sylhet", "Rajshahi", "Khulna", "Barisal", "Rangpur", "Mymensingh", "Bagerhat", "Bandarban", "Barguna", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", "Chapai Nawabganj", "Chuadanga", "Comilla", "Cox's Bazar", "Dinajpur", "Faridpur", "Feni", "Gaibandha", "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore", "Jhalokathi", "Jhenaidah", "Joypurhat", "Khagrachari", "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", "Meherpur", "Moulvibazar", "Munshiganj", "Naogaon", "Narail", "Narayanganj", "Narsingdi", "Natore", "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", "Pirojpur", "Rajbari", "Rangamati", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Tangail", "Thakurgaon"];
+    const districts = ["ঢাকা", "চট্টগ্রাম", "সিলেট", "রাজশাহী", "খুলনা", "বরিশাল", "রংপুর", "ময়মনসিংহ", "বাগেরহাট", "বান্দরবান", "বরগুনা", "ভোলা", "বগুড়া", "ব্রাহ্মণবাড়ীয়া", "চাঁদপুর", "চাঁপাইনবাবগঞ্জ", "চুয়াডাঙ্গা", "কুমিল্লা", "কক্সবাজার", "দিনাজপুর", "ফরিদপুর", "ফেনী", "গাইবান্ধা", "গাজীপুর", "গোপালগঞ্জ", "হবিগঞ্জ", "জামালপুর", "যশোর", "ঝালকাঠি", "ঝিনাইদহ", "জয়পুরহাট", "খাগড়াছড়ি", "কিশোরগঞ্জ", "কুড়িগ্রাম", "কুষ্টিয়া", "লক্ষ্মীপুর", "লালমনিরহাট", "মাদারীপুর", "মাগুরা", "মানিকগঞ্জ", "মেহেরপুর", "মৌলভীবাজার", "মুন্সিগঞ্জ", "নওগাঁ", "নড়াইল", "নারায়ণগঞ্জ", "নরসিংদী", "নাটোর", "নেত্রকোনা", "নীলফামারী", "নোয়াখালী", "পাবনা", "পঞ্চগড়", "পটুয়াখালী", "পিরোজপুর", "রাজবাড়ী", "রাঙ্গামাটি", "সাতক্ষীরা", "শরীয়তপুর", "শেরপুর", "সিরাজগঞ্জ", "সুনামগঞ্জ", "টাঙ্গাইল", "ঠাকুরগাঁও"];
     const distSelect = document.getElementById('district');
     districts.sort().forEach(d => { let opt = document.createElement('option'); opt.value = d; opt.innerText = d; distSelect.appendChild(opt); });
 
@@ -100,7 +154,6 @@
         }
     });
 
-    // স্লাইডার ১.৫ সেকেন্ড পর পর
     let sIdx = 0;
     setInterval(() => {
         if(sliders.length > 1){
@@ -116,14 +169,14 @@
 
     function openForm() {
         const total = qty.black + qty.white;
-        if (total === 0) { alert("কমপক্ষে একটি পণ্য  নির্বাচন করুন ❌✅🔺 !"); return; }
+        if (total === 0) { alert("দয়া করে একটি আইটেম নির্বাচন করুন ☺️✅"); return; }
         document.getElementById("orderModal").style.display = "flex";
-        const delivery = total >= 2 ? 0 : 99;
+        const delivery = total >= 2 ? 0 : 100;
         const subtotal = total * unitPrice;
         document.getElementById("finalSummary").innerHTML = `
-            <b>Order Items:</b> Black: ${qty.black} | White: ${qty.white}<br>
-            <b>Bill:</b> ৳${subtotal} | <b>Delivery:</b> ৳${delivery}<br>
-            <b>Total Amount: ৳${subtotal + delivery}</b><br>
+            <b>অর্ডার আইটেম:</b> Black: ${qty.black} | White: ${qty.white}<br>
+            <b>মূল্য:</b> ৳${subtotal} | <b>ডেলিভারি:</b> ৳${delivery}<br>
+            <b>সর্বমোট মূল্য: ৳${subtotal + delivery}</b><br>
             <span style="color:red; font-weight:bold;">${globalOffer}</span>
         `;
     }
@@ -133,31 +186,57 @@
     function sendOrder() {
         const name = document.getElementById("name").value;
         const phone = document.getElementById("phone").value;
-        if (!name || phone.length < 11) { alert("আপনার দেওয়া তথ্যটি কোথায় ভুল রয়েছে দয়া করে তথ্যটি সঠিক করুন ❌🔺✅!"); return; }
+        const district = document.getElementById("district").value;
+        const upazila = document.getElementById("upazila").value;
+        const landmark = document.getElementById("landmark").value || "N/A";
+        
+        // Validation with specific error messages
+        if (!name || name.trim() === "") {
+            alert("❌ আপনার নাম লেখা হয়নি। দয়া করে আপনার নাম সঠিকভাবে লিখুন।");
+            return;
+        }
+        if (!phone || phone.length !== 11) {
+            alert("❌ আপনার ফোন নাম্বারটি ১১ সংখ্যার নয়। দয়া করে ১১ সংখ্যার সঠিক ফোন নাম্বার দিন।");
+            return;
+        }
+        if (!district || district === "") {
+            alert("❌ জেলা নির্বাচন করা হয়নি। দয়া করে আপনার জেলা নির্বাচন করুন।");
+            return;
+        }
+        if (!upazila || upazila.trim() === "") {
+            alert("❌ থানা/সিটি লেখা হয়নি। দয়া করে আপনার থানা বা সিটির নাম লিখুন।");
+            return;
+        }
 
         const btn = document.getElementById("confirmBtn");
-        btn.innerText = "Processing..."; btn.disabled = true;
+        btn.innerText = "প্রসেসিং..."; 
+        btn.disabled = true;
 
         const orderID = Math.floor(10000 + Math.random() * 90000);
         const total = qty.black + qty.white;
-        const delivery = total >= 2 ? 0 : 99;
+        const delivery = total >= 2 ? 0 : 100;
+        const subtotal = total * unitPrice;
+        const grandTotal = subtotal + delivery;
 
         emailjs.send('service_akk7tzo', 'template_kulaxeh', {
             order_no: orderID,
             name: name,
             phone: phone,
-            district: document.getElementById("district").value,
-            upazila: document.getElementById("upazila").value,
-            location: document.getElementById("landmark").value || "N/A",
+            district: district,
+            upazila: upazila,
+            location: landmark,
             black: qty.black,
             white: qty.white,
-            product_total: total * unitPrice,
+            product_total: subtotal,
             delivery: delivery,
-            total: (total * unitPrice) + delivery
+            total: grandTotal
         }).then(() => {
-            alert("Order Success! ID: " + orderID);
+            const areaInfo = landmark !== "N/A" ? `🗺️ এলাকা: ${landmark}\n` : "";
+            alert(`✅ আপনার অর্ডারটি সফল হয়েছে!\n\n📋 অর্ডার আইডি: ${orderID}\n\n👤 নাম: ${name}\n📞 নাম্বার: ${phone}\n📍 জেলা: ${district}\n🏘️ থানা/সিটি: ${upazila}\n${areaInfo}\n📦 প্রোডাক্ট:\nBlack: ${qty.black} টি\nWhite: ${qty.white} টি\n\n💰 সর্বমোট মূল্য: ৳${grandTotal}\n\n✅ আমাদের একজন নিজস্ব প্রতিনিধি খুবই শীঘ্রই আপনার সাথে যোগাযোগ করবে। ✅📞`);
             location.reload();
         }, () => {
+            alert("❌ অর্ডার সম্পন্ন হয়নি। দয়া করে আবার চেষ্টা করুন।");
+            btn.innerText = "অর্ডার সম্পন্ন করুন";
             btn.disabled = false;
         });
     }
